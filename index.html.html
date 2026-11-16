@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS Cloud Services & Concepts Interactive Study Guide</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            aws: {
+              navy: '#232F3E',
+              slate: '#161E2D',
+              orange: '#FF9900',
+              orangeHover: '#EC7211',
+              teal: '#0073BB',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom scrollbar for category pills */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Flashcard 3D flip effect */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-aws-slate dark:text-slate-100 font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col">
+
+  <!-- Top Navigation & Study Progress Header -->
+  <header class="sticky top-0 z-30 bg-aws-navy text-white shadow-lg border-b border-slate-700/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <!-- Brand & Title -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-aws-orange flex items-center justify-center text-aws-navy font-extrabold text-lg shadow-inner shrink-0">
+              AWS
+            </div>
+            <div>
+              <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white">
+                AWS Cloud Services &amp; Concepts Guide
+              </h1>
+              <p class="text-xs text-slate-300">
+                Interactive Reference, Official Docs &amp; Exam Prep
+              </p>
+            </div>
+          </div>
+
+          <!-- Mobile Theme Toggle -->
+          <button id="themeToggleMobile" type="button" aria-label="Toggle dark mode" class="md:hidden p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 transition">
+            <span class="theme-icon">🌙</span>
+          </button>
+        </div>
+
+        <!-- Study Progress, Flashcards & Theme Controls -->
+        <div class="flex flex-wrap items-center gap-3">
+          <!-- Progress Pill -->
+          <div class="flex items-center gap-3 bg-slate-800/90 border border-slate-700 px-3.5 py-2 rounded-xl flex-1 sm:flex-initial">
+            <div class="flex flex-col min-w-[120px]">
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-300">Study Progress</span>
+                <span id="progressText" class="text-aws-orange font-bold">0 / 0</span>
+              </div>
+              <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                <div id="progressBar" class="bg-aws-orange h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+            <button id="resetProgressBtn" type="button" title="Reset progress" class="text-xs text-slate-400 hover:text-white underline ml-1">
+              Reset
+            </button>
+          </div>
+
+          <!-- Flashcard / Quiz Mode Trigger -->
+          <button id="openQuizBtn" type="button" class="flex items-center justify-center gap-2 bg-aws-orange hover:bg-aws-orangeHover text-aws-navy font-bold text-sm px-4 py-2.5 rounded-xl shadow transition transform active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            <span>Flashcards &amp; Quiz</span>
+          </button>
+
+          <!-- Desktop Theme Toggle -->
+          <button id="themeToggleDesktop" type="button" aria-label="Toggle dark mode" class="hidden md:flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 text-sm font-medium transition">
+            <span class="theme-icon">🌙</span>
+            <span class="theme-label">Dark</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="mt-4 flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z" />
+            </svg>
+          </div>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Search 120+ AWS services, concepts, or keywords (e.g., EC2, S3, IAM, Kubernetes, DNS, SQL)..."
+            class="w-full pl-11 pr-10 py-2.5 rounded-xl bg-slate-800/90 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-aws-orange focus:border-transparent text-sm"
+          />
+          <button id="clearSearchBtn" type="button" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white">
+            ✕
+          </button>
+        </div>
+
+        <!-- Status Filter Dropdown -->
+        <div class="flex items-center gap-2">
+          <select id="statusFilter" aria-label="Filter by review status" class="w-full sm:w-auto px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-600 text-sm text-white focus:outline-none focus:ring-2 focus:ring-aws-orange">
+            <option value="all">All Statuses</option>
+            <option value="unreviewed">Unreviewed Only</option>
+            <option value="reviewed">Reviewed Only</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filter Pills -->
+    <div class="bg-slate-900/90 border-t border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
+        <div id="categoryPills" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+          <!-- Pills dynamically injected by JS -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Study Cards Grid -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Results Summary Bar -->
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+      <div class="text-sm text-slate-600 dark:text-slate-300">
+        Showing <span id="visibleCount" class="font-bold text-slate-900 dark:text-white">0</span> items
+        <span id="activeCategoryLabel" class="font-medium text-aws-teal dark:text-aws-orange"></span>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <button id="markVisibleReviewedBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-200/80 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium transition">
+          Mark Filtered as Reviewed
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 px-4 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-aws-navy/40">
+      <div class="text-4xl mb-3">🔍</div>
+      <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1">No matching AWS services or concepts</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-4">
+        Try adjusting your search keywords, switching categories, or clearing the review status filter.
+      </p>
+      <button id="resetAllFiltersBtn" type="button" class="px-4 py-2 rounded-xl bg-aws-orange text-aws-navy font-semibold text-sm hover:bg-aws-orangeHover transition">
+        Clear All Filters
+      </button>
+    </div>
+
+    <!-- Cards Container -->
+    <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Cards dynamically injected by JS -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-aws-navy border-t border-slate-200 dark:border-slate-800 py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <p>AWS Cloud Practitioner &amp; Solutions Architect Interactive Study Guide • Progress saved locally in your browser.</p>
+      <a href="https://docs.aws.amazon.com/" target="_blank" rel="noopener noreferrer" class="text-aws-teal dark:text-aws-orange hover:underline font-medium">
+        Explore Full AWS Documentation Portal ↗
+      </a>
+    </div>
+  </footer>
+
+  <!-- Interactive Flashcard & Quiz Modal -->
+  <div id="quizModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-aws-navy border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-aws-navy text-white border-b border-slate-700 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg bg-aws-orange text-aws-navy font-extrabold text-xs uppercase">Study Mode</span>
+          <h2 class="font-bold text-base sm:text-lg">AWS Flashcards &amp; Quick Quiz</h2>
+        </div>
+        <button id="closeQuizBtn" type="button" class="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          ✕
+        </button>
+      </div>
+
+      <!-- Mode Switcher Tabs -->
+      <div class="px-6 pt-4 flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-3">
+        <div class="flex gap-2">
+          <button id="tabFlashcard" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-aws-orange text-aws-navy transition">
+            Flashcards
+          </button>
+          <button id="tabQuiz" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+            Multiple-Choice Quiz
+          </button>
+        </div>
+        <span id="studyPoolInfo" class="text-xs text-slate-500 dark:text-slate-400">
+          Deck: All Categories
+        </span>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto flex-1">
+        <!-- Flashcard View -->
+        <div id="flashcardView" class="flex flex-col items-center">
+          <div class="w-full flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 mb-3">
+            <span id="fcCounter">Card 1 of 10</span>
+            <span id="fcCategory" class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-medium text-slate-700 dark:text-slate-300">Category</span>
+          </div>
+
+          <!-- Flip Card Container -->
+          <div id="flashcardBox" class="w-full min-h-[230px] rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/90 p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-aws-orange transition select-none shadow-sm">
+            <div id="fcPromptLabel" class="text-[11px] uppercase tracking-wider font-bold text-aws-orange mb-2">
+              Service / Concept (Click to Reveal Summary)
+            </div>
+            <h3 id="fcFrontTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">
+              Amazon EC2
+            </h3>
+            <p id="fcBackSummary" class="hidden text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed mt-2">
+              Amazon EC2 runs virtual servers in the cloud with flexible computing capacity.
+            </p>
+            <a id="fcDocLink" href="#" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="hidden mt-4 inline-flex items-center gap-1 text-xs font-semibold text-aws-teal dark:text-aws-orange hover:underline">
+              Open Official AWS Resource ↗
+            </a>
+          </div>
+
+          <!-- Flashcard Controls -->
+          <div class="w-full flex flex-wrap items-center justify-between gap-3 mt-5">
+            <button id="fcPrevBtn" type="button" class="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              ← Previous
+            </button>
+            <button id="fcMarkBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition">
+              ✓ Mark Reviewed
+            </button>
+            <button id="fcNextBtn" type="button" class="px-4 py-2 rounded-xl bg-aws-navy dark:bg-slate-700 hover:bg-slate-800 text-white text-sm font-medium transition">
+              Next →
+            </button>
+          </div>
+        </div>
+
+        <!-- Multiple-Choice Quiz View -->
+        <div id="quizView" class="hidden">
+          <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-3">
+            <span>Identify the AWS service or concept described below:</span>
+            <span id="quizScore" class="font-bold text-emerald-600 dark:text-emerald-400">Score: 0 / 0</span>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 mb-4">
+            <span id="quizCatBadge" class="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-aws-orange/20 text-amber-800 dark:text-aws-orange mb-2">
+              Category
+            </span>
+            <p id="quizQuestionText" class="text-sm sm:text-base font-medium text-slate-900 dark:text-white leading-relaxed">
+              Question description goes here...
+            </p>
+          </div>
+
+          <div id="quizOptions" class="space-y-2.5">
+            <!-- Options injected by JS -->
+          </div>
+
+          <div id="quizFeedback" class="hidden mt-4 p-3.5 rounded-xl text-sm font-medium"></div>
+
+          <div class="mt-5 flex justify-end">
+            <button id="quizNextBtn" type="button" class="px-5 py-2.5 rounded-xl bg-aws-orange hover:bg-aws-orangeHover text-aws-navy font-bold text-sm transition">
+              Next Question →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Data & Logic -->
+  <script>
+    // Complete dataset of all AWS Services & Concepts organized into logical AWS domains
+    const awsItems = [
+      // 1. Cloud Fundamentals & Global Infrastructure
+      {
+        id: 'cloud-computing',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'What is Cloud Computing?',
+        summary: 'Learn more about the basics of cloud computing, including on-demand delivery of IT resources over the internet with pay-as-you-go pricing.',
+        url: 'https://aws.amazon.com/what-is-cloud-computing/'
+      },
+      {
+        id: 'shared-responsibility-intro',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS Shared Responsibility Model (Overview)',
+        summary: 'Learn more about the AWS Shared Responsibility Model separating cloud provider security responsibilities from customer security responsibilities.',
+        url: 'https://aws.amazon.com/compliance/shared-responsibility-model/'
+      },
+      {
+        id: 'shared-responsibility-detail',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS Shared Responsibility Model (Security Of vs. In)',
+        summary: 'AWS is responsible for security of the cloud (infrastructure, hardware, networking, facilities) while customers are responsible for security in the cloud (data, configuration, access management).',
+        url: 'https://aws.amazon.com/compliance/shared-responsibility-model/'
+      },
+      {
+        id: 'regions-azs',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'Regions and Availability Zones',
+        summary: 'View a complete list of AWS Regions and isolated Availability Zones designed for fault tolerance and high availability.',
+        url: 'https://aws.amazon.com/about-aws/global-infrastructure/regions_az/'
+      },
+      {
+        id: 'global-infrastructure',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS Global Infrastructure',
+        summary: 'Learn more about the AWS Global Infrastructure spanning Regions, Availability Zones, Local Zones, Wavelength Zones, and Edge Locations.',
+        url: 'https://aws.amazon.com/about-aws/global-infrastructure/'
+      },
+      {
+        id: 'aws-for-the-edge',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS for the Edge',
+        summary: 'Learn more about AWS edge locations and edge networking that bring data processing and content delivery closer to end users.',
+        url: 'https://aws.amazon.com/edge/'
+      },
+      {
+        id: 'cloudformation',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS CloudFormation',
+        summary: 'Learn more about the infrastructure as code service, CloudFormation, which lets you model, provision, and manage AWS and third-party resources using templates.',
+        url: 'https://aws.amazon.com/cloudformation/'
+      },
+      {
+        id: 'well-architected',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS Well-Architected',
+        summary: 'The AWS Well-Architected Framework provides a structured approach to designing and operating secure, high performing, resilient, and efficient infrastructure for applications and workloads on AWS, guided by six key pillars.',
+        url: 'https://aws.amazon.com/architecture/well-architected/'
+      },
+      {
+        id: 'well-architected-framework-docs',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS Well-Architected Framework Documentation',
+        summary: 'This website is the official documentation for the AWS Well-Architected Framework, detailing best practices across Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability.',
+        url: 'https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html'
+      },
+      {
+        id: 'well-architected-tool',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'What is AWS Well-Architected Tool?',
+        summary: 'The AWS Well-Architected Tool provides a consistent process for measuring your architecture using AWS best practices.',
+        url: 'https://aws.amazon.com/well-architected-tool/'
+      },
+      {
+        id: 'architecture-center',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS Architecture Center',
+        summary: 'The AWS Architecture Center provides reference architectures and best practices for building secure, efficient, and scalable solutions on AWS.',
+        url: 'https://aws.amazon.com/architecture/'
+      },
+      {
+        id: 'architecture-blog',
+        category: 'Cloud Fundamentals & Global Infrastructure',
+        title: 'AWS Architecture Blog',
+        summary: 'The AWS Architecture Blog shares technical insights and best practices for building effective solutions on AWS.',
+        url: 'https://aws.amazon.com/blogs/architecture/'
+      },
+
+      // 2. Compute, Containers & Serverless
+      {
+        id: 'compute-on-aws',
+        category: 'Compute, Containers & Serverless',
+        title: 'Compute on AWS',
+        summary: 'This resource provides an overview of the different cloud computing services offered by AWS across virtual machines, containers, and serverless.',
+        url: 'https://aws.amazon.com/products/compute/'
+      },
+      {
+        id: 'compute-blog',
+        category: 'Compute, Containers & Serverless',
+        title: 'AWS Compute Blog',
+        summary: 'This blog provides updates, tutorials, and best practices for using AWS compute services, such as Amazon EC2, AWS Lambda, Amazon ECS, and more.',
+        url: 'https://aws.amazon.com/blogs/compute/'
+      },
+      {
+        id: 'compute-services',
+        category: 'Compute, Containers & Serverless',
+        title: 'AWS Compute Services',
+        summary: 'This reference provides an in-depth introduction to the compute services available within the AWS Cloud.',
+        url: 'https://docs.aws.amazon.com/whitepapers/latest/aws-overview/compute-services.html'
+      },
+      {
+        id: 'hands-on-tutorials-compute',
+        category: 'Compute, Containers & Serverless',
+        title: 'Hands-On Tutorials: Compute',
+        summary: 'This resource provides practical, step-by-step tutorials designed to help users gain hands-on experience with AWS compute services. It is ideal for beginners and those new to cloud computing.',
+        url: 'https://aws.amazon.com/getting-started/hands-on/?getting-started-all.sort-by=item.additionalFields.sortOrder&getting-started-all.sort-order=asc&awsf.getting-started-category=*all'
+      },
+      {
+        id: 'amazon-ec2',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon EC2',
+        summary: 'Amazon EC2 runs virtual servers in the cloud with flexible computing capacity.',
+        url: 'https://aws.amazon.com/ec2/'
+      },
+      {
+        id: 'ec2-instance-types',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon EC2 Instance Types',
+        summary: 'This guide provides detailed information about the different types of EC2 instances, including their specifications, capabilities, and use cases. It helps you choose the right instance type based on your workload needs, such as compute, memory, and storage requirements.',
+        url: 'https://aws.amazon.com/ec2/instance-types/'
+      },
+      {
+        id: 'ec2-pricing',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon EC2 Pricing',
+        summary: 'This guide explains the different pricing models for EC2 instances, including On-Demand, Reserved Instances, and Spot Instances, so you can choose the best option based on your usage.',
+        url: 'https://aws.amazon.com/ec2/pricing/'
+      },
+      {
+        id: 'ec2-auto-scaling',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon EC2 Auto Scaling',
+        summary: 'Amazon EC2 Auto Scaling automatically adjusts instance count based on demand for high availability and cost-efficiency.',
+        url: 'https://aws.amazon.com/ec2/autoscaling/'
+      },
+      {
+        id: 'elastic-load-balancing',
+        category: 'Compute, Containers & Serverless',
+        title: 'Elastic Load Balancing',
+        summary: 'Elastic Load Balancing automatically distributes incoming application traffic across multiple EC2 instances for high availability and fault tolerance.',
+        url: 'https://aws.amazon.com/elasticloadbalancing/'
+      },
+      {
+        id: 'amazon-sns',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon Simple Notification Service (Amazon SNS)',
+        summary: 'Amazon SNS is a messaging service for sending notifications to users or other applications through SMS, email, or mobile push notifications.',
+        url: 'https://aws.amazon.com/sns/'
+      },
+      {
+        id: 'amazon-sqs',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon Simple Queue Service (Amazon SQS)',
+        summary: 'Amazon SQS decouples application components through message queuing, storing and processing messages reliably.',
+        url: 'https://aws.amazon.com/sqs/'
+      },
+      {
+        id: 'containers-on-aws',
+        category: 'Compute, Containers & Serverless',
+        title: 'Containers on AWS',
+        summary: 'The AWS Containers Services page provides an overview of the AWS container offerings, including services for container image storage, orchestration, and compute. These offerings are designed to streamline the deployment and management of containerized applications.',
+        url: 'https://aws.amazon.com/containers/'
+      },
+      {
+        id: 'amazon-ecr',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon Elastic Container Registry (Amazon ECR)',
+        summary: 'The Amazon ECR is a fully managed service for storing, managing, and deploying container images securely at scale.',
+        url: 'https://aws.amazon.com/ecr/'
+      },
+      {
+        id: 'amazon-ecs',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon Elastic Container Service (Amazon ECS)',
+        summary: 'Amazon ECS is a fully managed service that streamlines the deployment, management, and scaling of containerized applications on AWS.',
+        url: 'https://aws.amazon.com/ecs/'
+      },
+      {
+        id: 'amazon-eks',
+        category: 'Compute, Containers & Serverless',
+        title: 'Amazon Elastic Kubernetes Service (Amazon EKS)',
+        summary: 'Amazon EKS is a fully managed Kubernetes service that streamlines running Kubernetes clusters on AWS and on premises. It automates infrastructure management and integrates with AWS networking, security, and storage services.',
+        url: 'https://aws.amazon.com/eks/'
+      },
+      {
+        id: 'aws-fargate',
+        category: 'Compute, Containers & Serverless',
+        title: 'AWS Fargate',
+        summary: 'Fargate is a serverless compute engine for running containers without managing servers. It is integrated with Amazon ECS and Amazon EKS.',
+        url: 'https://aws.amazon.com/fargate/'
+      },
+      {
+        id: 'elastic-beanstalk',
+        category: 'Compute, Containers & Serverless',
+        title: 'AWS Elastic Beanstalk',
+        summary: 'Elastic Beanstalk is a fully managed service for deploying and scaling web applications without managing infrastructure.',
+        url: 'https://aws.amazon.com/elasticbeanstalk/'
+      },
+      {
+        id: 'aws-batch',
+        category: 'Compute, Containers & Serverless',
+        title: 'AWS Batch',
+        summary: 'AWS Batch is a fully managed service for efficiently running large-scale batch computing jobs on AWS.',
+        url: 'https://aws.amazon.com/batch/'
+      },
+      {
+        id: 'amazon-lightsail',
+        category: 'Compute, Containers & Serverless',
+        title: 'What is Amazon Lightsail?',
+        summary: 'Lightsail is a simplified cloud platform offering VPS, containers, and databases with predictable pricing.',
+        url: 'https://aws.amazon.com/lightsail/'
+      },
+      {
+        id: 'aws-outposts',
+        category: 'Compute, Containers & Serverless',
+        title: 'What is AWS Outposts?',
+        summary: 'AWS Outposts extends AWS infrastructure and services to on-premises locations for low-latency, local data processing.',
+        url: 'https://aws.amazon.com/outposts/'
+      },
+      {
+        id: 'modern-app-strategy',
+        category: 'Compute, Containers & Serverless',
+        title: 'Choosing a modern application strategy',
+        summary: 'The AWS Decision Guide for Modern Application Strategy helps organizations determine the most suitable development approach—serverless or Kubernetes—based on their operational model, team structure, and workload requirements.',
+        url: 'https://docs.aws.amazon.com/decision-guides/latest/modern-application-strategy-on-aws/modern-application-strategy-on-aws.html'
+      },
+
+      // 3. Networking & Content Delivery
+      {
+        id: 'amazon-vpc',
+        category: 'Networking & Content Delivery',
+        title: 'Amazon Virtual Private Cloud (Amazon VPC)',
+        summary: 'Amazon VPC is a service to provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network that you define.',
+        url: 'https://aws.amazon.com/vpc/'
+      },
+      {
+        id: 'subnet',
+        category: 'Networking & Content Delivery',
+        title: 'Subnet',
+        summary: 'A subnet is a section of a VPC that can contain resources and is used to organize your resources. They can be either public or private.',
+        url: 'https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html'
+      },
+      {
+        id: 'internet-gateway',
+        category: 'Networking & Content Delivery',
+        title: 'Internet gateway',
+        summary: 'An internet gateway is a connection between a VPC and the internet. It allows public traffic from the internet to access your VPC.',
+        url: 'https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html'
+      },
+      {
+        id: 'virtual-private-gateway',
+        category: 'Networking & Content Delivery',
+        title: 'Virtual private gateway',
+        summary: 'A virtual private gateway is the component that allows protected internet traffic to enter into the VPC. It allows a connection between your VPC and a private network only if it is coming from an approved network.',
+        url: 'https://docs.aws.amazon.com/vpn/latest/s2svpn/SetUpVPNConnections.html'
+      },
+      {
+        id: 'aws-client-vpn',
+        category: 'Networking & Content Delivery',
+        title: 'AWS Client VPN',
+        summary: 'Amazon Client VPN is a networking service you can use to connect your remote workers and on-premises networks to the cloud. It is a fully managed, elastic VPN service that automatically scales up or down based on user demand.',
+        url: 'https://aws.amazon.com/vpn/client-vpn/'
+      },
+      {
+        id: 'aws-site-to-site-vpn',
+        category: 'Networking & Content Delivery',
+        title: 'AWS Site-to-Site VPN',
+        summary: 'AWS Site-to-Site VPN creates a secure connection between your data center or branch offices and your AWS Cloud resources.',
+        url: 'https://aws.amazon.com/vpn/site-to-site-vpn/'
+      },
+      {
+        id: 'aws-privatelink',
+        category: 'Networking & Content Delivery',
+        title: 'AWS PrivateLink',
+        summary: 'AWS PrivateLink is a highly available, scalable technology that you can use to privately connect your VPC to services and resources as though they were in your VPC.',
+        url: 'https://aws.amazon.com/privatelink/'
+      },
+      {
+        id: 'aws-direct-connect',
+        category: 'Networking & Content Delivery',
+        title: 'AWS Direct Connect',
+        summary: 'AWS Direct Connect is a service that provides a dedicated private connection between your data center and a VPC.',
+        url: 'https://aws.amazon.com/directconnect/'
+      },
+      {
+        id: 'network-acl',
+        category: 'Networking & Content Delivery',
+        title: 'Network Access Control List (network ACL)',
+        summary: 'A network ACL allows or denies specific inbound or outbound traffic at the subnet level using stateless packet filtering.',
+        url: 'https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html'
+      },
+      {
+        id: 'security-groups',
+        category: 'Networking & Content Delivery',
+        title: 'Security groups',
+        summary: 'Security groups control the inbound and outbound traffic for a resource at the instance level using stateful packet filtering.',
+        url: 'https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html'
+      },
+      {
+        id: 'dns',
+        category: 'Networking & Content Delivery',
+        title: 'Domain Name System (DNS)',
+        summary: 'DNS translates human readable domain names to machine readable IP addresses (for example, 192.0.2.0).',
+        url: 'https://aws.amazon.com/route53/what-is-dns/'
+      },
+      {
+        id: 'amazon-route-53',
+        category: 'Networking & Content Delivery',
+        title: 'Amazon Route 53',
+        summary: 'Route 53 is a scalable and reliable DNS web service that helps developers and businesses route end users to internet applications, whether they’re hosted in AWS or elsewhere. It also supports domain registration, health checks, and advanced traffic routing policies.',
+        url: 'https://aws.amazon.com/route53/'
+      },
+      {
+        id: 'amazon-cloudfront',
+        category: 'Networking & Content Delivery',
+        title: 'Amazon CloudFront',
+        summary: 'CloudFront is a web service that speeds up distribution of your web content to your users through a worldwide network of data centers called edge locations. It securely delivers content with low latency and high transfer speeds.',
+        url: 'https://aws.amazon.com/cloudfront/'
+      },
+      {
+        id: 'aws-global-accelerator',
+        category: 'Networking & Content Delivery',
+        title: 'AWS Global Accelerator',
+        summary: 'Global Accelerator is a networking service that helps improve the availability and performance of applications for global users by routing traffic through the AWS global network. It helps improve application availability, performance, and security.',
+        url: 'https://aws.amazon.com/global-accelerator/'
+      },
+      {
+        id: 'amazon-transit-gateway',
+        category: 'Networking & Content Delivery',
+        title: 'Amazon Transit Gateway',
+        summary: 'Amazon VPC Transit Gateway is a network transit hub used to interconnect VPCs and on-premises networks.',
+        url: 'https://aws.amazon.com/transit-gateway/'
+      },
+      {
+        id: 'nat-gateway',
+        category: 'Networking & Content Delivery',
+        title: 'NAT Gateway',
+        summary: "Network Address Translation (NAT) gateway allows instances in a private subnet to connect with services outside your VPC. External services can't initiate a connection with those instances.",
+        url: 'https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html'
+      },
+      {
+        id: 'api-gateway',
+        category: 'Networking & Content Delivery',
+        title: 'Amazon API Gateway',
+        summary: 'The Amazon API Gateway is an AWS service for creating, publishing, maintaining, monitoring, and securing APIs at any scale. It handles all the tasks involved in accepting and processing up to hundreds of thousands of concurrent API calls.',
+        url: 'https://aws.amazon.com/api-gateway/'
+      },
+
+      // 4. Storage & Databases
+      {
+        id: 'ec2-instance-store',
+        category: 'Storage & Databases',
+        title: 'Amazon EC2 Instance Store User Guide',
+        summary: 'A temporary storage option that is directly attached to the host computer of an EC2 instance, providing high-performance but non-persistent storage.',
+        url: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html'
+      },
+      {
+        id: 'amazon-ebs',
+        category: 'Storage & Databases',
+        title: 'Amazon Elastic Block Store (Amazon EBS)',
+        summary: 'A scalable block storage service that provides persistent, high-performance volumes you can attach to your EC2 instances for data storage and applications.',
+        url: 'https://aws.amazon.com/ebs/'
+      },
+      {
+        id: 'amazon-ebs-faq',
+        category: 'Storage & Databases',
+        title: 'Amazon Elastic Block Store (Amazon EBS) FAQ',
+        summary: 'Frequently asked questions about Amazon EBS volumes, performance, durability, and pricing.',
+        url: 'https://aws.amazon.com/ebs/faqs/'
+      },
+      {
+        id: 'amazon-ebs-snapshots',
+        category: 'Storage & Databases',
+        title: 'Amazon EBS Snapshots User Guide',
+        summary: 'EBS Snapshots are point-in-time backups of your cloud storage volumes, making it possible to protect data and restore it when needed.',
+        url: 'https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html'
+      },
+      {
+        id: 'data-lifecycle-manager',
+        category: 'Storage & Databases',
+        title: 'Amazon Data Lifecycle Manager User Guide',
+        summary: 'A service that streamlines the creation, retention, and deletion of Amazon EBS snapshots.',
+        url: 'https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html'
+      },
+      {
+        id: 'amazon-s3',
+        category: 'Storage & Databases',
+        title: 'Amazon Simple Storage Service (Amazon S3)',
+        summary: 'A scalable cloud storage service that can store and retrieve any amount of data from anywhere on the web.',
+        url: 'https://aws.amazon.com/s3/'
+      },
+      {
+        id: 'amazon-s3-faq',
+        category: 'Storage & Databases',
+        title: 'Amazon Simple Storage Service (Amazon S3) FAQ',
+        summary: 'Frequently asked questions about Amazon S3 object storage, security, and durability.',
+        url: 'https://aws.amazon.com/s3/faqs/'
+      },
+      {
+        id: 's3-storage-classes',
+        category: 'Storage & Databases',
+        title: 'Amazon S3 Storage Classes',
+        summary: 'Amazon S3 offers various storage classes, from high-performance frequent access to cost-effective archival options, tailored to different data retrieval needs and budget constraints.',
+        url: 'https://aws.amazon.com/s3/storage-classes/'
+      },
+      {
+        id: 's3-versioning',
+        category: 'Storage & Databases',
+        title: 'Amazon S3 Versioning User Guide',
+        summary: 'Amazon S3 versioning keeps multiple variants of objects, offering recovery from unintended deletions or modifications by preserving every update to your files.',
+        url: 'https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html'
+      },
+      {
+        id: 's3-buckets',
+        category: 'Storage & Databases',
+        title: 'Amazon S3 Buckets User Guide',
+        summary: 'S3 buckets are cloud storage containers that securely hold various types of data, allowing convenient access and management through the AWS online infrastructure.',
+        url: 'https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html'
+      },
+      {
+        id: 'amazon-efs',
+        category: 'Storage & Databases',
+        title: 'Amazon Elastic File System (Amazon EFS)',
+        summary: 'A scalable, fully-managed file storage service that lets multiple AWS resources access shared data simultaneously without capacity planning.',
+        url: 'https://aws.amazon.com/efs/'
+      },
+      {
+        id: 'amazon-efs-faq',
+        category: 'Storage & Databases',
+        title: 'Amazon Elastic File System (Amazon EFS) FAQ',
+        summary: 'Frequently asked questions about Amazon EFS shared NFS file storage.',
+        url: 'https://aws.amazon.com/efs/faqs/'
+      },
+      {
+        id: 'amazon-fsx',
+        category: 'Storage & Databases',
+        title: 'Amazon FSx',
+        summary: 'A fully managed file storage service that lets you launch and run file systems like Windows File Server, Lustre, NetApp ONTAP, and OpenZFS in the AWS cloud.',
+        url: 'https://aws.amazon.com/fsx/'
+      },
+      {
+        id: 'fsx-windows',
+        category: 'Storage & Databases',
+        title: 'Amazon FSx for Windows File Server',
+        summary: 'An Amazon FSx option providing reliable, high-performance file storage compatible with Windows applications in the AWS Cloud.',
+        url: 'https://aws.amazon.com/fsx/windows/'
+      },
+      {
+        id: 'fsx-netapp-ontap',
+        category: 'Storage & Databases',
+        title: 'Amazon FSx for NetApp ONTAP',
+        summary: 'An Amazon FSx option providing file storage with advanced data management capabilities and compatibility with both Windows and Linux workloads on AWS.',
+        url: 'https://aws.amazon.com/fsx/netapp-ontap/'
+      },
+      {
+        id: 'fsx-openzfs',
+        category: 'Storage & Databases',
+        title: 'Amazon FSx for OpenZFS',
+        summary: 'An Amazon FSx option that provides high-performance, scalable storage using the popular open-source ZFS file system.',
+        url: 'https://aws.amazon.com/fsx/openzfs/'
+      },
+      {
+        id: 'fsx-lustre',
+        category: 'Storage & Databases',
+        title: 'Amazon FSx for Lustre',
+        summary: 'An Amazon FSx option designed to accelerate workloads by providing fast data access for compute-intensive applications in AWS.',
+        url: 'https://aws.amazon.com/fsx/lustre/'
+      },
+      {
+        id: 'aws-storage-gateway',
+        category: 'Storage & Databases',
+        title: 'AWS Storage Gateway',
+        summary: 'A hybrid cloud storage service that provides seamless and secure integration between on-premises environment and AWS cloud storage services.',
+        url: 'https://aws.amazon.com/storagegateway/'
+      },
+      {
+        id: 's3-file-gateway',
+        category: 'Storage & Databases',
+        title: 'Amazon S3 File Gateway',
+        summary: 'A Storage Gateway configuration that provides local file access to S3 objects while caching frequently accessed data locally for faster retrieval.',
+        url: 'https://aws.amazon.com/storagegateway/file/'
+      },
+      {
+        id: 'tape-gateway',
+        category: 'Storage & Databases',
+        title: 'Tape Gateway',
+        summary: 'A Storage Gateway configuration used for backing up data to Amazon S3 while maintaining compatibility with existing tape-based backup applications.',
+        url: 'https://aws.amazon.com/storagegateway/vtl/'
+      },
+      {
+        id: 'volume-gateway',
+        category: 'Storage & Databases',
+        title: 'Volume Gateway',
+        summary: 'A Storage Gateway configuration that provides iSCSI block storage volumes to on-premises applications, offering both cached and stored modes.',
+        url: 'https://aws.amazon.com/storagegateway/volume/'
+      },
+      {
+        id: 'amazon-rds',
+        category: 'Storage & Databases',
+        title: 'Amazon Relational Database Service (Amazon RDS)',
+        summary: 'A relational database service supporting multiple engines like MySQL, PostgreSQL, and Microsoft SQL Server with automated maintenance and backups.',
+        url: 'https://aws.amazon.com/rds/'
+      },
+      {
+        id: 'amazon-rds-security',
+        category: 'Storage & Databases',
+        title: 'Amazon RDS Security',
+        summary: 'Detailed information about security configurations, encryption, network isolation, and IAM authentication in Amazon RDS.',
+        url: 'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.html'
+      },
+      {
+        id: 'amazon-aurora',
+        category: 'Storage & Databases',
+        title: 'Amazon Aurora',
+        summary: 'A cloud-native database offering superior performance and availability over traditional databases while maintaining MySQL and PostgreSQL compatibility.',
+        url: 'https://aws.amazon.com/rds/aurora/'
+      },
+      {
+        id: 'amazon-dynamodb',
+        category: 'Storage & Databases',
+        title: 'Amazon DynamoDB',
+        summary: 'A NoSQL database service providing single-digit millisecond performance at any scale with built-in security.',
+        url: 'https://aws.amazon.com/dynamodb/'
+      },
+      {
+        id: 'amazon-elasticache',
+        category: 'Storage & Databases',
+        title: 'Amazon ElastiCache',
+        summary: 'An in-memory caching service that supports Redis, Valkey, or Memcached to improve application performance through faster data retrieval.',
+        url: 'https://aws.amazon.com/elasticache/'
+      },
+      {
+        id: 'amazon-documentdb',
+        category: 'Storage & Databases',
+        title: 'Amazon DocumentDB',
+        summary: 'A MongoDB-compatible document database service designed for mission-critical workloads with automatic scaling.',
+        url: 'https://aws.amazon.com/documentdb/'
+      },
+      {
+        id: 'aws-backup',
+        category: 'Storage & Databases',
+        title: 'Amazon Backup (AWS Backup)',
+        summary: 'A centralized service for automating and managing data backups across AWS services and on-premises resources.',
+        url: 'https://aws.amazon.com/backup/'
+      },
+      {
+        id: 'amazon-neptune',
+        category: 'Storage & Databases',
+        title: 'Amazon Neptune',
+        summary: 'A graph database service optimized for storing and querying highly connected data relationships.',
+        url: 'https://aws.amazon.com/neptune/'
+      },
+      {
+        id: 'what-is-relational-db',
+        category: 'Storage & Databases',
+        title: 'What Is a Relational Database?',
+        summary: 'A structured database using tables with predefined schemas, supporting complex queries and transactions through SQL for consistent data relationships.',
+        url: 'https://aws.amazon.com/relational-database/'
+      },
+      {
+        id: 'what-is-nosql-db',
+        category: 'Storage & Databases',
+        title: 'What Is a NoSQL Database?',
+        summary: 'A nonrelational database offering flexible schemas and high scalability for varied data types, optimized for specific data models and patterns.',
+        url: 'https://aws.amazon.com/nosql/'
+      },
+      {
+        id: 'what-is-in-memory-caching',
+        category: 'Storage & Databases',
+        title: 'What Is an In-Memory Caching Service?',
+        summary: 'A high-speed data storage layer using RAM instead of disk storage, delivering microsecond latency for frequently accessed data.',
+        url: 'https://aws.amazon.com/caching/'
+      },
+
+      // 5. AI, Machine Learning & Analytics
+      {
+        id: 'amazon-comprehend',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Comprehend',
+        summary: 'Use natural language processing (NLP) to extract key insights, sentiment, entities, and language from documents.',
+        url: 'https://aws.amazon.com/comprehend/'
+      },
+      {
+        id: 'amazon-polly',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Polly',
+        summary: 'Convert text into lifelike speech using deep learning text-to-speech synthesis.',
+        url: 'https://aws.amazon.com/polly/'
+      },
+      {
+        id: 'amazon-transcribe',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Transcribe',
+        summary: 'Convert speech into accurate text using automatic speech recognition (ASR).',
+        url: 'https://aws.amazon.com/transcribe/'
+      },
+      {
+        id: 'amazon-translate',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Translate',
+        summary: 'Translate text into multiple languages quickly and accurately using neural machine translation.',
+        url: 'https://aws.amazon.com/translate/'
+      },
+      {
+        id: 'amazon-kendra',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Kendra',
+        summary: 'Use natural language processing to intelligently query and search enterprise content across repositories.',
+        url: 'https://aws.amazon.com/kendra/'
+      },
+      {
+        id: 'amazon-rekognition',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Rekognition',
+        summary: 'Identify objects, people, text, scenes, and activities in images and videos using computer vision.',
+        url: 'https://aws.amazon.com/rekognition/'
+      },
+      {
+        id: 'amazon-textract',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Textract',
+        summary: 'Detect and extract typed and handwritten text, forms, and tables from scanned documents.',
+        url: 'https://aws.amazon.com/textract/'
+      },
+      {
+        id: 'amazon-lex',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Lex',
+        summary: 'Add voice and text conversational interfaces (chatbots) to applications using the same technology as Alexa.',
+        url: 'https://aws.amazon.com/lex/'
+      },
+      {
+        id: 'amazon-personalize',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Personalize',
+        summary: 'Add real-time, personalized customer recommendations to applications using machine learning.',
+        url: 'https://aws.amazon.com/personalize/'
+      },
+      {
+        id: 'amazon-sagemaker-ai',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon SageMaker AI',
+        summary: 'Build, train, and deploy your own machine learning (ML) models at scale without worrying about underlying infrastructure.',
+        url: 'https://aws.amazon.com/sagemaker/'
+      },
+      {
+        id: 'sagemaker-jumpstart',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon SageMaker JumpStart',
+        summary: 'Deploy pre-trained ML solutions, like computer vision, NLP, and tabular data, with just a few clicks.',
+        url: 'https://aws.amazon.com/sagemaker/jumpstart/'
+      },
+      {
+        id: 'amazon-bedrock',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Bedrock',
+        summary: 'Fine-tune and seamlessly integrate large foundation models (FMs) from Amazon and leading AI startups into your AWS applications with a single API.',
+        url: 'https://aws.amazon.com/bedrock/'
+      },
+      {
+        id: 'amazon-q-business',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Q Business',
+        summary: "Answer questions and solve problems using the data and expertise found in your company's information repositories.",
+        url: 'https://aws.amazon.com/q/business/'
+      },
+      {
+        id: 'amazon-q-developer',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Q Developer',
+        summary: 'Accelerate software development with generative AI code recommendations, debugging, and AWS architectural guidance.',
+        url: 'https://aws.amazon.com/q/developer/'
+      },
+      {
+        id: 'kinesis-data-streams',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Kinesis Data Streams',
+        summary: 'Ingest and process terabytes of streaming data in real time from thousands of sources.',
+        url: 'https://aws.amazon.com/kinesis/data-streams/'
+      },
+      {
+        id: 'amazon-data-firehose',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Data Firehose',
+        summary: 'Ingest, transform, and deliver streaming data within seconds to multiple consumers, such as data lakes and warehouses.',
+        url: 'https://aws.amazon.com/firehose/'
+      },
+      {
+        id: 's3-data-lake',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon S3 (Data Lake Foundation)',
+        summary: 'Store virtually limitless amounts of all types of structured and unstructured data using this popular data lake choice.',
+        url: 'https://aws.amazon.com/big-data/datalakes-and-analytics/datalakes/'
+      },
+      {
+        id: 'amazon-redshift',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Redshift',
+        summary: 'Store petabytes of structured or semistructured data in this cloud data warehouse service and analyze large datasets using complex SQL queries.',
+        url: 'https://aws.amazon.com/redshift/'
+      },
+      {
+        id: 'aws-glue-data-catalog',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'AWS Glue Data Catalog',
+        summary: 'Provide unified metadata to various analytics services with this centralized repository.',
+        url: 'https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html'
+      },
+      {
+        id: 'aws-glue',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'AWS Glue',
+        summary: 'Serverless data integration and ETL service that prepares and processes data by using the AWS Glue Data Catalog as a reference.',
+        url: 'https://aws.amazon.com/glue/'
+      },
+      {
+        id: 'amazon-emr',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon EMR',
+        summary: 'Process big data workloads at scale by using popular open-source frameworks like Apache Spark and Apache Hadoop.',
+        url: 'https://aws.amazon.com/emr/'
+      },
+      {
+        id: 'amazon-athena',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon Athena',
+        summary: 'Serverless interactive query service to analyze various data sources hosted in Amazon S3 and elsewhere with a single standard SQL query.',
+        url: 'https://aws.amazon.com/athena/'
+      },
+      {
+        id: 'amazon-quicksight',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon QuickSight',
+        summary: 'Cloud-native business intelligence (BI) service to visualize data by creating interactive dashboards with or without expertise.',
+        url: 'https://aws.amazon.com/quicksight/'
+      },
+      {
+        id: 'amazon-opensearch',
+        category: 'AI, Machine Learning & Analytics',
+        title: 'Amazon OpenSearch Service',
+        summary: 'Visualize, search, and monitor real-time log and operational data analytics with keyword or NLP searches.',
+        url: 'https://aws.amazon.com/opensearch-service/'
+      },
+
+      // 6. Security, Identity & Compliance
+      {
+        id: 'aws-iam',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Identity and Access Management (IAM)',
+        summary: 'Securely manage identities, roles, policies, and fine-grained access to AWS services and resources.',
+        url: 'https://aws.amazon.com/iam/'
+      },
+      {
+        id: 'iam-identity-center',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS IAM Identity Center',
+        summary: 'Connect your existing workforce identity source and centrally manage access to multiple AWS accounts and cloud applications with single sign-on (SSO).',
+        url: 'https://aws.amazon.com/iam/identity-center/'
+      },
+      {
+        id: 'aws-secrets-manager',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Secrets Manager',
+        summary: 'Centrally store, rotate, and manage database credentials, API keys, and other secrets securely.',
+        url: 'https://aws.amazon.com/secrets-manager/'
+      },
+      {
+        id: 'aws-systems-manager',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Systems Manager',
+        summary: 'Manage nodes, patch baselines, automation runbooks, and operational parameters at scale on AWS and in multi-cloud and hybrid environments.',
+        url: 'https://aws.amazon.com/systems-manager/'
+      },
+      {
+        id: 'aws-shield',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Shield',
+        summary: 'Managed Distributed Denial of Service (DDoS) protection service that safeguards your network and applications from common and sophisticated DDoS attacks.',
+        url: 'https://aws.amazon.com/shield/'
+      },
+      {
+        id: 'aws-waf',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS WAF (Web Application Firewall)',
+        summary: 'Protect your web applications and APIs from common web exploits, bots, and blocked IP addresses defined by a web ACL.',
+        url: 'https://aws.amazon.com/waf/'
+      },
+      {
+        id: 'aws-kms',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Key Management Service (AWS KMS)',
+        summary: 'Create, control, and manage cryptographic keys to encrypt and decrypt your data across AWS services and applications.',
+        url: 'https://aws.amazon.com/kms/'
+      },
+      {
+        id: 'amazon-macie',
+        category: 'Security, Identity & Compliance',
+        title: 'Amazon Macie',
+        summary: 'Use machine learning and pattern matching to certify that sensitive data (such as PII) is discovered and protected in Amazon S3.',
+        url: 'https://aws.amazon.com/macie/'
+      },
+      {
+        id: 'aws-acm',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Certificate Manager (ACM)',
+        summary: 'Provision, create, renew, and manage public and private SSL/TLS certificates that provide data encryption in transit.',
+        url: 'https://aws.amazon.com/certificate-manager/'
+      },
+      {
+        id: 'amazon-inspector',
+        category: 'Security, Identity & Compliance',
+        title: 'Amazon Inspector',
+        summary: 'Automated vulnerability management service that continuously checks workloads for software vulnerabilities and unintended network exposure.',
+        url: 'https://aws.amazon.com/inspector/'
+      },
+      {
+        id: 'amazon-guardduty',
+        category: 'Security, Identity & Compliance',
+        title: 'Amazon GuardDuty',
+        summary: 'Continuously monitor your AWS accounts, workloads, and data with intelligent threat detection.',
+        url: 'https://aws.amazon.com/guardduty/'
+      },
+      {
+        id: 'amazon-detective',
+        category: 'Security, Identity & Compliance',
+        title: 'Amazon Detective',
+        summary: 'Analyze, investigate, and quickly identify the root cause of security findings or suspicious activities with interactive visualizations contained in a unified view.',
+        url: 'https://aws.amazon.com/detective/'
+      },
+      {
+        id: 'aws-security-hub',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Security Hub',
+        summary: 'Aggregate security findings across AWS accounts and services, perform automated security checks, and organize findings into actionable insights.',
+        url: 'https://aws.amazon.com/security-hub/'
+      },
+      {
+        id: 'amazon-cloudwatch',
+        category: 'Security, Identity & Compliance',
+        title: 'Amazon CloudWatch',
+        summary: 'CloudWatch monitors your AWS resources and the applications you run on AWS in real time, providing system-wide visibility into metrics, logs, alarms, and operational health.',
+        url: 'https://aws.amazon.com/cloudwatch/'
+      },
+      {
+        id: 'aws-cloudtrail',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS CloudTrail',
+        summary: 'CloudTrail enables governance, auditing, security monitoring, and operational troubleshooting by recording user activity and API calls as events ("Who did what, where, and when?").',
+        url: 'https://aws.amazon.com/cloudtrail/'
+      },
+      {
+        id: 'aws-artifact',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Artifact',
+        summary: 'AWS Artifact is a self-service portal that provides on-demand access to AWS security and compliance documentation, including audit reports, certifications, and agreements.',
+        url: 'https://aws.amazon.com/artifact/'
+      },
+      {
+        id: 'aws-config',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Config',
+        summary: 'AWS Config is a service to continuously assess, audit, and evaluate the historical and current configurations of your AWS resources.',
+        url: 'https://aws.amazon.com/config/'
+      },
+      {
+        id: 'aws-audit-manager',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Audit Manager',
+        summary: 'Audit Manager is a service to continually audit your AWS usage to streamline risk and compliance assessment against industry frameworks.',
+        url: 'https://aws.amazon.com/audit-manager/'
+      },
+      {
+        id: 'aws-organizations',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Organizations',
+        summary: 'Organizations helps you centrally manage and govern your environment as you grow and scale your AWS resources, managing policies for groups of accounts and automating account creation.',
+        url: 'https://aws.amazon.com/organizations/'
+      },
+      {
+        id: 'aws-control-tower',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Control Tower',
+        summary: 'With AWS Control Tower, you can set up a secure multi-account landing zone and enforce governance guardrails for security, operations, and compliance at scale.',
+        url: 'https://aws.amazon.com/controltower/'
+      },
+      {
+        id: 'aws-service-catalog',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Service Catalog',
+        summary: 'Create, share, and organize curated portfolios of approved AWS resources so teams can deploy baseline networking and security tools consistently.',
+        url: 'https://aws.amazon.com/servicecatalog/'
+      },
+      {
+        id: 'aws-license-manager',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS License Manager',
+        summary: 'License Manager is a service that helps you centrally manage your software licenses from vendors like Microsoft, SAP, Oracle, and IBM across AWS and on-premises environments.',
+        url: 'https://aws.amazon.com/license-manager/'
+      },
+      {
+        id: 'aws-trusted-advisor',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Trusted Advisor',
+        summary: 'Trusted Advisor helps you optimize costs, increase performance, improve security and resilience, and monitor service quotas using automated best practice checks.',
+        url: 'https://aws.amazon.com/premiumsupport/technology/trusted-advisor/'
+      },
+      {
+        id: 'aws-health',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS Health',
+        summary: 'AWS Health is the authoritative data source for events and changes affecting your AWS Cloud resources, notifying you about service events, planned changes, and account notifications.',
+        url: 'https://aws.amazon.com/premiumsupport/technology/aws-health/'
+      },
+      {
+        id: 'iam-access-analyzer',
+        category: 'Security, Identity & Compliance',
+        title: 'AWS IAM Access Analyzer',
+        summary: 'IAM Access Analyzer provides capabilities to set, verify, and refine security permissions and identify resources shared externally to achieve least privilege security standards.',
+        url: 'https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html'
+      },
+
+      // 7. Billing, Pricing & Governance
+      {
+        id: 'amazon-s3-pricing',
+        category: 'Billing, Pricing & Governance',
+        title: 'Amazon S3 Pricing',
+        summary: 'Outlines costs for S3 storage classes, API requests, data transfer, and management features, along with details on AWS Free Tier for new customers.',
+        url: 'https://aws.amazon.com/s3/pricing/'
+      },
+      {
+        id: 'ec2-on-demand-pricing',
+        category: 'Billing, Pricing & Governance',
+        title: 'Amazon EC2 On-Demand Pricing',
+        summary: 'Details the hourly or per-second costs for EC2 instances by instance type and operating system with no long-term commitments or upfront payments.',
+        url: 'https://aws.amazon.com/ec2/pricing/on-demand/'
+      },
+      {
+        id: 'what-is-organizations-guide',
+        category: 'Billing, Pricing & Governance',
+        title: 'What is AWS Organizations? (User Guide)',
+        summary: 'Explains how to centrally manage multiple AWS accounts, consolidate billing, automate account creation, and apply Service Control Policies (SCPs).',
+        url: 'https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html'
+      },
+      {
+        id: 'aws-billing-console',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Billing Console',
+        summary: 'A centralized platform for managing and understanding AWS charges, offering tools to view and download invoices, monitor discounts and credits, and analyze spending across accounts.',
+        url: 'https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-what-is.html'
+      },
+      {
+        id: 'aws-budgets',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Budgets',
+        summary: 'Provides tools to create custom budgets for tracking and managing AWS costs, usage, and Reserved Instance or Savings Plan utilization with proactive alerts and automated actions.',
+        url: 'https://aws.amazon.com/aws-cost-management/aws-budgets/'
+      },
+      {
+        id: 'aws-cost-explorer',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Cost Explorer',
+        summary: 'Provides an interactive interface to visualize, analyze, and manage historical AWS costs and usage, with customizable reports and cost forecasting.',
+        url: 'https://aws.amazon.com/aws-cost-management/aws-cost-explorer/'
+      },
+      {
+        id: 'aws-pricing-calculator',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Pricing Calculator Documentation',
+        summary: 'A free, web-based estimation tool that helps customers create detailed cost estimates for AWS services before provisioning architecture.',
+        url: 'https://calculator.aws/'
+      },
+      {
+        id: 'aws-repost',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS re:Post',
+        summary: 'A community-driven, question-and-answer knowledge platform where users seek help, share technical insights, and find vetted solutions related to AWS services.',
+        url: 'https://repost.aws/'
+      },
+      {
+        id: 'aws-trust-safety',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Trust and Safety Center',
+        summary: 'Offers guidance on reporting suspected abuse of AWS resources, protecting applications, and following best practices for digital messaging on AWS.',
+        url: 'https://aws.amazon.com/premiumsupport/knowledge-center/report-aws-abuse/'
+      },
+      {
+        id: 'aws-professional-services',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Professional Services',
+        summary: 'A global team of AWS experts that helps enterprise organizations accelerate cloud adoption and digital transformation with tailored guidance.',
+        url: 'https://aws.amazon.com/professional-services/'
+      },
+      {
+        id: 'aws-documentation-portal',
+        category: 'Billing, Pricing & Governance',
+        title: 'Welcome to AWS Documentation',
+        summary: 'Provides comprehensive official technical resources, including user guides, API references, SDK docs, tutorials, and best practices across all AWS services.',
+        url: 'https://docs.aws.amazon.com/'
+      },
+      {
+        id: 'aws-marketplace',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Marketplace',
+        summary: 'A curated digital catalog where customers can discover, test, purchase, and deploy third-party software, data products, and services with consolidated AWS billing.',
+        url: 'https://aws.amazon.com/marketplace'
+      },
+      {
+        id: 'engage-aws-partners',
+        category: 'Billing, Pricing & Governance',
+        title: 'Engage with AWS Partners',
+        summary: 'Discover how certified AWS Consulting and Technology Partners in the AWS Partner Network (APN) help organizations build, migrate, and manage cloud workloads.',
+        url: 'https://aws.amazon.com/partners/'
+      },
+      {
+        id: 'partner-funding-benefits',
+        category: 'Billing, Pricing & Governance',
+        title: 'Funding Benefits for AWS Partners',
+        summary: 'Outlines financial funding benefits, including promotional credits, cash funding, and discounts, to support AWS Partners in developing and selling AWS solutions.',
+        url: 'https://aws.amazon.com/partners/funding/'
+      },
+      {
+        id: 'aws-partner-events',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Partner Events',
+        summary: 'Lists upcoming technical webinars, workshops, summits, and in-person events for IT professionals, developers, and business leaders.',
+        url: 'https://aws.amazon.com/partners/events/'
+      },
+      {
+        id: 'aws-partner-training',
+        category: 'Billing, Pricing & Governance',
+        title: 'AWS Partner Training and Certification',
+        summary: 'Offers specialized learning paths, accreditations, courses, and certifications to help AWS Partners build validated cloud expertise.',
+        url: 'https://aws.amazon.com/partners/training/'
+      },
+
+      // 8. Migration & Developer/End-User Tools
+      {
+        id: 'three-phases-migration',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'Three Phases of Migration',
+        summary: 'Large-scale cloud migrations follow three structured phases: 1) Assess, 2) Mobilize, and 3) Migrate and Modernize.',
+        url: 'https://aws.amazon.com/cloud-migration/how-to-migrate/'
+      },
+      {
+        id: 'aws-caf',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Cloud Adoption Framework (AWS CAF)',
+        summary: 'Brings AWS experience and best practices across six perspectives (Business, People, Governance, Platform, Security, Operations) to guide cloud transformation.',
+        url: 'https://aws.amazon.com/cloud-adoption-framework/'
+      },
+      {
+        id: 'seven-migration-strategies',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'Seven Migration Strategies (7 Rs)',
+        summary: 'The seven common application migration patterns: Relocate, Rehost (Lift-and-Shift), Replatform, Refactor (Re-architect), Repurchase, Retain, and Retire.',
+        url: 'https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-readiness/understanding-migration-strategies.html'
+      },
+      {
+        id: 'migration-evaluator',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'Migration Evaluator',
+        summary: 'A complimentary migration assessment service that analyzes current on-premises server footprints to build a data-driven business case and TCO projection for AWS.',
+        url: 'https://aws.amazon.com/migration-evaluator/'
+      },
+      {
+        id: 'application-discovery-service',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Application Discovery Service',
+        summary: 'Discovers on-premises server inventory, resource utilization, and network dependencies to help plan cloud migration waves.',
+        url: 'https://aws.amazon.com/application-discovery/'
+      },
+      {
+        id: 'application-migration-service',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Application Migration Service (AWS MGN)',
+        summary: 'The primary recommended service for lift-and-shift migrations, automatically converting physical, virtual, or cloud servers to run natively on AWS.',
+        url: 'https://aws.amazon.com/application-migration-service/'
+      },
+      {
+        id: 'aws-migration-hub',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Migration Hub',
+        summary: 'A single centralized location to discover applications, track migration progress across multiple AWS and partner tools, and orchestrate refactoring.',
+        url: 'https://aws.amazon.com/migration-hub/'
+      },
+      {
+        id: 'aws-dms',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Database Migration Service (AWS DMS)',
+        summary: 'Quickly and securely migrate relational and NoSQL databases to AWS with minimal downtime while keeping the source database operational.',
+        url: 'https://aws.amazon.com/dms/'
+      },
+      {
+        id: 'aws-sct',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Schema Conversion Tool (AWS SCT)',
+        summary: 'Automatically converts commercial database schemas and code objects (such as stored procedures, views, and functions) from one database engine to another during heterogeneous migrations.',
+        url: 'https://aws.amazon.com/dms/schema-conversion-tool/'
+      },
+      {
+        id: 'aws-datasync',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS DataSync',
+        summary: 'Automates and accelerates secure online data transfers between on-premises storage systems and AWS storage services like Amazon S3, EFS, and FSx.',
+        url: 'https://aws.amazon.com/datasync/'
+      },
+      {
+        id: 'aws-transfer-family',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Transfer Family',
+        summary: 'Provides fully managed, scalable file transfer workflows directly into and out of Amazon S3 or EFS over SFTP, FTPS, FTP, and AS2 protocols.',
+        url: 'https://aws.amazon.com/transfer-family/'
+      },
+      {
+        id: 'direct-connect-migration',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Direct Connect (Hybrid & Migration Connectivity)',
+        summary: 'Establishes a dedicated private network connection with consistent bandwidth and low latency between your on-premises data center and AWS.',
+        url: 'https://aws.amazon.com/directconnect/'
+      },
+      {
+        id: 'aws-snow-family',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Snow Family (Snowball Edge)',
+        summary: 'Physical edge computing and ruggedized storage devices for offline data migration of terabytes to petabytes where high-speed internet is unavailable or impractical.',
+        url: 'https://aws.amazon.com/snow/'
+      },
+      {
+        id: 'aws-codebuild',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS CodeBuild',
+        summary: 'Fully managed continuous integration service that compiles source code, runs unit tests, and produces ready-to-deploy software packages.',
+        url: 'https://aws.amazon.com/codebuild/'
+      },
+      {
+        id: 'aws-codepipeline',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS CodePipeline',
+        summary: 'Fully managed continuous delivery service that automates and models build, test, and deploy release pipelines for fast application updates.',
+        url: 'https://aws.amazon.com/codepipeline/'
+      },
+      {
+        id: 'aws-xray',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS X-Ray',
+        summary: 'Distributed tracing service that helps developers analyze, monitor, and debug production microservices and serverless applications end-to-end.',
+        url: 'https://aws.amazon.com/xray/'
+      },
+      {
+        id: 'aws-appsync',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS AppSync',
+        summary: 'Fully managed service that connects web and mobile applications to multiple data sources using a single scalable GraphQL API or Pub/Sub API.',
+        url: 'https://aws.amazon.com/appsync/'
+      },
+      {
+        id: 'aws-amplify',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS Amplify',
+        summary: 'Set of tools and hosting services that enables frontend web and mobile developers to quickly build, deploy, and scale full-stack applications on AWS.',
+        url: 'https://aws.amazon.com/amplify/'
+      },
+      {
+        id: 'amazon-connect',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'Amazon Connect',
+        summary: 'Omnichannel cloud contact center service that helps businesses deliver superior customer service operations at lower cost with built-in AI.',
+        url: 'https://aws.amazon.com/connect/'
+      },
+      {
+        id: 'amazon-ses',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'Amazon Simple Email Service (Amazon SES)',
+        summary: 'Cost-effective, flexible, and scalable cloud email service to send large volumes of transactional, notification, and marketing emails.',
+        url: 'https://aws.amazon.com/ses/'
+      },
+      {
+        id: 'amazon-appstream',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'Amazon AppStream 2.0',
+        summary: 'Fully managed non-persistent application streaming service that delivers desktop applications securely to any user browser on compatible devices.',
+        url: 'https://aws.amazon.com/appstream2/'
+      },
+      {
+        id: 'amazon-workspaces',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'Amazon WorkSpaces',
+        summary: 'Fully managed, persistent cloud Virtual Desktop Infrastructure (VDI) providing employees with secure Windows or Linux desktops from anywhere.',
+        url: 'https://aws.amazon.com/workspaces/'
+      },
+      {
+        id: 'workspaces-secure-browser',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'Amazon WorkSpaces Secure Browser',
+        summary: 'Fully managed, isolated remote browser service that provides employees with secure access to internal web-based applications and SaaS sites.',
+        url: 'https://aws.amazon.com/workspaces/secure-browser/'
+      },
+      {
+        id: 'aws-iot-core',
+        category: 'Migration & Developer/End-User Tools',
+        title: 'AWS IoT Core',
+        summary: 'Managed cloud platform that lets billions of connected devices easily and securely interact with cloud applications and other devices.',
+        url: 'https://aws.amazon.com/iot-core/'
+      }
+    ];
+
+    // Ordered Category List
+    const categories = [
+      'All',
+      'Cloud Fundamentals & Global Infrastructure',
+      'Compute, Containers & Serverless',
+      'Networking & Content Delivery',
+      'Storage & Databases',
+      'AI, Machine Learning & Analytics',
+      'Security, Identity & Compliance',
+      'Billing, Pricing & Governance',
+      'Migration & Developer/End-User Tools'
+    ];
+
+    // State Management
+    const STORAGE_KEY = 'aws_study_guide_reviewed_v1';
+    const THEME_KEY = 'aws_study_guide_theme_v1';
+
+    let reviewedIds = new Set();
+    let activeCategory = 'All';
+    let searchQuery = '';
+    let statusFilter = 'all';
+
+    // Flashcard & Quiz State
+    let studyDeck = [];
+    let fcIndex = 0;
+    let fcFlipped = false;
+    let quizCurrentItem = null;
+    let quizAnswered = false;
+    let quizCorrectCount = 0;
+    let quizTotalCount = 0;
+
+    // Load saved state safely
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          reviewedIds = new Set(JSON.parse(saved));
+        }
+      } catch (e) {
+        reviewedIds = new Set();
+      }
+
+      try {
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        updateThemeUI();
+      } catch (e) {}
+    }
+
+    function saveReviewed() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(reviewedIds)));
+      } catch (e) {}
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try {
+        localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+      } catch (e) {}
+      updateThemeUI();
+    }
+
+    function updateThemeUI() {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.querySelectorAll('.theme-icon').forEach(el => {
+        el.textContent = isDark ? '☀️' : '🌙';
+      });
+      document.querySelectorAll('.theme-label').forEach(el => {
+        el.textContent = isDark ? 'Light' : 'Dark';
+      });
+    }
+
+    // Filter Logic
+    function getFilteredItems() {
+      const q = searchQuery.trim().toLowerCase();
+      return awsItems.filter(item => {
+        const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
+        const isRev = reviewedIds.has(item.id);
+        const matchesStatus =
+          statusFilter === 'all' ||
+          (statusFilter === 'reviewed' && isRev) ||
+          (statusFilter === 'unreviewed' && !isRev);
+
+        if (!matchesCategory || !matchesStatus) return false;
+        if (!q) return true;
+
+        return (
+          item.title.toLowerCase().includes(q) ||
+          item.summary.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q)
+        );
+      });
+    }
+
+    // Render Category Pills
+    function renderCategoryPills() {
+      const container = document.getElementById('categoryPills');
+      container.innerHTML = '';
+
+      categories.forEach(cat => {
+        const count = cat === 'All'
+          ? awsItems.length
+          : awsItems.filter(i => i.category === cat).length;
+
+        const isActive = activeCategory === cat;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = isActive
+          ? 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold bg-aws-orange text-aws-navy shadow-sm transition'
+          : 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition';
+
+        btn.innerHTML = `${cat} <span class="ml-1 opacity-75">(${count})</span>`;
+        btn.addEventListener('click', () => {
+          activeCategory = cat;
+          renderCategoryPills();
+          renderCards();
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    // Update Study Progress Bar
+    function updateProgressUI() {
+      const total = awsItems.length;
+      const done = reviewedIds.size;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      document.getElementById('progressText').textContent = `${done} / ${total} (${pct}%)`;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+    }
+
+    // Render Cards Grid
+    function renderCards() {
+      const grid = document.getElementById('cardsGrid');
+      const emptyState = document.getElementById('emptyState');
+      const filtered = getFilteredItems();
+
+      document.getElementById('visibleCount').textContent = filtered.length;
+      document.getElementById('activeCategoryLabel').textContent =
+        activeCategory !== 'All' ? `in ${activeCategory}` : '';
+
+      grid.innerHTML = '';
+
+      if (filtered.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      const fragment = document.createDocumentFragment();
+
+      filtered.forEach(item => {
+        const isReviewed = reviewedIds.has(item.id);
+        const card = document.createElement('article');
+        card.className = `group flex flex-col justify-between rounded-2xl p-5 border transition-all duration-200 shadow-sm hover:shadow-md ${
+          isReviewed
+            ? 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-300/80 dark:border-emerald-800/70'
+            : 'bg-white dark:bg-aws-navy/85 border-slate-200 dark:border-slate-700/80 hover:border-aws-orange/70'
+        }`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <span class="inline-block text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700">
+                ${escapeHtml(item.category)}
+              </span>
+              <button
+                type="button"
+                data-id="${item.id}"
+                class="review-toggle-btn shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition ${
+                  isReviewed
+                    ? 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-600 hover:border-aws-orange hover:text-aws-orange'
+                }"
+                title="Toggle reviewed status"
+              >
+                <span>${isReviewed ? '✓ Reviewed' : '○ Mark Reviewed'}</span>
+              </button>
+            </div>
+
+            <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-aws-teal dark:group-hover:text-aws-orange transition leading-snug mb-2">
+              ${escapeHtml(item.title)}
+            </h3>
+
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              ${escapeHtml(item.summary)}
+            </p>
+          </div>
+
+          <div class="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-700/70 flex items-center justify-between">
+            <a
+              href="${item.url}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-aws-teal dark:text-aws-orange hover:underline"
+            >
+              <span>Official AWS Docs / Resource</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        `;
+
+        fragment.appendChild(card);
+      });
+
+      grid.appendChild(fragment);
+      updateProgressUI();
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Toggle individual item reviewed state
+    function toggleReviewed(id) {
+      if (reviewedIds.has(id)) {
+        reviewedIds.delete(id);
+      } else {
+        reviewedIds.add(id);
+      }
+      saveReviewed();
+      renderCards();
+    }
+
+    // Flashcard & Quiz Modal Logic
+    function openStudyModal() {
+      const filtered = getFilteredItems();
+      studyDeck = filtered.length >= 4 ? [...filtered] : [...awsItems];
+      // Shuffle deck
+      studyDeck.sort(() => Math.random() - 0.5);
+
+      document.getElementById('studyPoolInfo').textContent =
+        filtered.length >= 4 && activeCategory !== 'All'
+          ? `Deck: ${activeCategory} (${studyDeck.length})`
+          : `Deck: Full Catalog (${studyDeck.length})`;
+
+      fcIndex = 0;
+      fcFlipped = false;
+      renderFlashcard();
+      generateQuizQuestion();
+
+      document.getElementById('quizModal').classList.remove('hidden');
+    }
+
+    function closeStudyModal() {
+      document.getElementById('quizModal').classList.add('hidden');
+    }
+
+    function renderFlashcard() {
+      if (!studyDeck.length) return;
+      const item = studyDeck[fcIndex];
+      document.getElementById('fcCounter').textContent = `Card ${fcIndex + 1} of ${studyDeck.length}`;
+      document.getElementById('fcCategory').textContent = item.category;
+      document.getElementById('fcFrontTitle').textContent = item.title;
+      document.getElementById('fcBackSummary').textContent = item.summary;
+      document.getElementById('fcDocLink').href = item.url;
+
+      const backEl = document.getElementById('fcBackSummary');
+      const linkEl = document.getElementById('fcDocLink');
+      const labelEl = document.getElementById('fcPromptLabel');
+
+      if (fcFlipped) {
+        backEl.classList.remove('hidden');
+        linkEl.classList.remove('hidden');
+        labelEl.textContent = 'Definition & Use Case (Click Card to Hide)';
+      } else {
+        backEl.classList.add('hidden');
+        linkEl.classList.add('hidden');
+        labelEl.textContent = 'Service / Concept (Click Card to Reveal Summary)';
+      }
+
+      const isRev = reviewedIds.has(item.id);
+      const markBtn = document.getElementById('fcMarkBtn');
+      markBtn.textContent = isRev ? '✓ Reviewed' : '✓ Mark Reviewed';
+      markBtn.className = isRev
+        ? 'px-4 py-2 rounded-xl bg-slate-600 text-white text-sm font-semibold transition'
+        : 'px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition';
+    }
+
+    function generateQuizQuestion() {
+      quizAnswered = false;
+      const feedback = document.getElementById('quizFeedback');
+      feedback.classList.add('hidden');
+
+      const pool = studyDeck.length >= 4 ? studyDeck : awsItems;
+      const correct = pool[Math.floor(Math.random() * pool.length)];
+      quizCurrentItem = correct;
+
+      // Pick 3 distinct distractors (prefer same category if possible)
+      let sameCat = awsItems.filter(i => i.id !== correct.id && i.category === correct.category);
+      let otherCat = awsItems.filter(i => i.id !== correct.id && i.category !== correct.category);
+      sameCat.sort(() => Math.random() - 0.5);
+      otherCat.sort(() => Math.random() - 0.5);
+
+      const distractors = [...sameCat, ...otherCat].slice(0, 3);
+      const options = [correct, ...distractors].sort(() => Math.random() - 0.5);
+
+      document.getElementById('quizCatBadge').textContent = correct.category;
+      document.getElementById('quizQuestionText').textContent = correct.summary;
+
+      const optionsContainer = document.getElementById('quizOptions');
+      optionsContainer.innerHTML = '';
+
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'w-full text-left px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-aws-orange text-sm font-semibold text-slate-800 dark:text-slate-100 transition';
+        btn.textContent = opt.title;
+        btn.addEventListener('click', () => handleQuizAnswer(opt, btn));
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function handleQuizAnswer(selectedOption, clickedBtn) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+      quizTotalCount++;
+
+      const isCorrect = selectedOption.id === quizCurrentItem.id;
+      if (isCorrect) {
+        quizCorrectCount++;
+        reviewedIds.add(quizCurrentItem.id);
+        saveReviewed();
+        renderCards();
+      }
+
+      document.getElementById('quizScore').textContent = `Score: ${quizCorrectCount} / ${quizTotalCount}`;
+
+      // Highlight buttons
+      const allBtns = document.getElementById('quizOptions').querySelectorAll('button');
+      allBtns.forEach(b => {
+        b.disabled = true;
+        if (b.textContent === quizCurrentItem.title) {
+          b.className = 'w-full text-left px-4 py-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-sm font-bold text-emerald-800 dark:text-emerald-200';
+        } else if (b === clickedBtn && !isCorrect) {
+          b.className = 'w-full text-left px-4 py-3 rounded-xl border-2 border-rose-500 bg-rose-50 dark:bg-rose-950/60 text-sm font-bold text-rose-800 dark:text-rose-200';
+        } else {
+          b.className += ' opacity-60';
+        }
+      });
+
+      const feedback = document.getElementById('quizFeedback');
+      feedback.classList.remove('hidden');
+      if (isCorrect) {
+        feedback.className = 'mt-4 p-3.5 rounded-xl text-sm font-medium bg-emerald-100 dark:bg-emerald-900/50 text-emerald-900 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700';
+        feedback.innerHTML = `Correct! <strong>${escapeHtml(quizCurrentItem.title)}</strong> has been marked as reviewed.`;
+      } else {
+        feedback.className = 'mt-4 p-3.5 rounded-xl text-sm font-medium bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 border border-rose-300 dark:border-rose-700';
+        feedback.innerHTML = `Not quite. The correct answer is <strong>${escapeHtml(quizCurrentItem.title)}</strong>. <a href="${quizCurrentItem.url}" target="_blank" rel="noopener noreferrer" class="underline font-bold ml-1">Read Docs ↗</a>`;
+      }
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      renderCategoryPills();
+      renderCards();
+
+      // Theme buttons
+      document.getElementById('themeToggleMobile').addEventListener('click', toggleTheme);
+      document.getElementById('themeToggleDesktop').addEventListener('click', toggleTheme);
+
+      // Search input
+      const searchInput = document.getElementById('searchInput');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+      searchInput.addEventListener('input', e => {
+        searchQuery = e.target.value;
+        clearSearchBtn.classList.toggle('hidden', searchQuery.length === 0);
+        renderCards();
+      });
+
+      clearSearchBtn.addEventListener('click', () => {
+        searchQuery = '';
+        searchInput.value = '';
+        clearSearchBtn.classList.add('hidden');
+        renderCards();
+      });
+
+      // Status filter
+      document.getElementById('statusFilter').addEventListener('change', e => {
+        statusFilter = e.target.value;
+        renderCards();
+      });
+
+      // Delegate review toggle clicks on cards
+      document.getElementById('cardsGrid').addEventListener('click', e => {
+        const btn = e.target.closest('.review-toggle-btn');
+        if (btn) {
+          toggleReviewed(btn.dataset.id);
+        }
+      });
+
+      // Mark filtered as reviewed
+      document.getElementById('markVisibleReviewedBtn').addEventListener('click', () => {
+        const visible = getFilteredItems();
+        visible.forEach(item => reviewedIds.add(item.id));
+        saveReviewed();
+        renderCards();
+      });
+
+      // Reset progress (inline confirmation toggle without alert/confirm)
+      const resetBtn = document.getElementById('resetProgressBtn');
+      let confirmResetTimeout = null;
+      resetBtn.addEventListener('click', () => {
+        if (resetBtn.dataset.confirm === 'true') {
+          reviewedIds.clear();
+          saveReviewed();
+          renderCards();
+          resetBtn.textContent = 'Reset';
+          resetBtn.dataset.confirm = 'false';
+          clearTimeout(confirmResetTimeout);
+        } else {
+          resetBtn.textContent = 'Confirm?';
+          resetBtn.dataset.confirm = 'true';
+          confirmResetTimeout = setTimeout(() => {
+            resetBtn.textContent = 'Reset';
+            resetBtn.dataset.confirm = 'false';
+          }, 3000);
+        }
+      });
+
+      // Reset all filters button
+      document.getElementById('resetAllFiltersBtn').addEventListener('click', () => {
+        activeCategory = 'All';
+        searchQuery = '';
+        statusFilter = 'all';
+        searchInput.value = '';
+        clearSearchBtn.classList.add('hidden');
+        document.getElementById('statusFilter').value = 'all';
+        renderCategoryPills();
+        renderCards();
+      });
+
+      // Modal controls
+      document.getElementById('openQuizBtn').addEventListener('click', openStudyModal);
+      document.getElementById('closeQuizBtn').addEventListener('click', closeStudyModal);
+      document.getElementById('quizModal').addEventListener('click', e => {
+        if (e.target.id === 'quizModal') closeStudyModal();
+      });
+
+      // Modal tabs
+      const tabFlashcard = document.getElementById('tabFlashcard');
+      const tabQuiz = document.getElementById('tabQuiz');
+      const flashcardView = document.getElementById('flashcardView');
+      const quizView = document.getElementById('quizView');
+
+      tabFlashcard.addEventListener('click', () => {
+        tabFlashcard.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-aws-orange text-aws-navy transition';
+        tabQuiz.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition';
+        flashcardView.classList.remove('hidden');
+        quizView.classList.add('hidden');
+      });
+
+      tabQuiz.addEventListener('click', () => {
+        tabQuiz.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-aws-orange text-aws-navy transition';
+        tabFlashcard.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition';
+        quizView.classList.remove('hidden');
+        flashcardView.classList.add('hidden');
+      });
+
+      // Flashcard interactions
+      document.getElementById('flashcardBox').addEventListener('click', () => {
+        fcFlipped = !fcFlipped;
+        renderFlashcard();
+      });
+
+      document.getElementById('fcPrevBtn').addEventListener('click', () => {
+        fcIndex = (fcIndex - 1 + studyDeck.length) % studyDeck.length;
+        fcFlipped = false;
+        renderFlashcard();
+      });
+
+      document.getElementById('fcNextBtn').addEventListener('click', () => {
+        fcIndex = (fcIndex + 1) % studyDeck.length;
+        fcFlipped = false;
+        renderFlashcard();
+      });
+
+      document.getElementById('fcMarkBtn').addEventListener('click', () => {
+        const item = studyDeck[fcIndex];
+        toggleReviewed(item.id);
+        renderFlashcard();
+      });
+
+      // Quiz Next button
+      document.getElementById('quizNextBtn').addEventListener('click', generateQuizQuestion);
+    });
+  </script>
+</body>
+</html>
